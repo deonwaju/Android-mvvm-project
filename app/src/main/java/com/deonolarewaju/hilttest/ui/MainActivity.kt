@@ -5,10 +5,12 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.deonolarewaju.hilttest.R
+import com.deonolarewaju.hilttest.databinding.ActivityMainBinding
 import com.deonolarewaju.hilttest.model.BlogModel
 import com.deonolarewaju.hilttest.util.DataState
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,11 +22,13 @@ class MainActivity : AppCompatActivity() {
 
     private val TAG: String = "AppDebugger"
 
+    private lateinit var binding: ActivityMainBinding
+
     private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         init()
         viewModel.setStateEvent(MainStateEvent.GetBlogEvents)
@@ -38,9 +42,17 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+
+    private fun init() {
+
+        setDataToRecyclerView(listOf())
+        subscribeObservers()
+
+    }
+
     private fun subscribeObservers() {
         viewModel.dataState.observe(this, Observer { dataState ->
-            when(dataState) {
+            when (dataState) {
                 is DataState.Success<List<BlogModel>> -> {
                     displayProgressBar(false)
                     setDataToRecyclerView(dataState.data)
@@ -58,15 +70,8 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    private fun init() {
-
-        setDataToRecyclerView(listOf())
-        subscribeObservers()
-
-    }
-
     private fun setDataToRecyclerView(userList: List<BlogModel>) {
-        recyclerViewMain.apply {
+        binding.recyclerViewMain.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = BlogAdapter(userList)
         }
@@ -76,15 +81,15 @@ class MainActivity : AppCompatActivity() {
 
         if (message != null) {
             Toast.makeText(this, "error: " + message, Toast.LENGTH_LONG)
-            textViewStart.text = message
+            binding.textViewStart.text = message
         } else {
             Toast.makeText(this, "Unknown error", Toast.LENGTH_LONG)
-            textViewStart.text = "Unknown error"
+            binding.textViewStart.text = "Unknown error"
         }
     }
 
     private fun displayProgressBar(isDisplayed: Boolean) {
-        progress_bar.visibility = if (isDisplayed) View.VISIBLE else View.GONE
+        binding.progressBar.visibility = if (isDisplayed) View.VISIBLE else View.GONE
     }
 
 }
