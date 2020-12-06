@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.deonolarewaju.hilttest.R
 import com.deonolarewaju.hilttest.model.BlogModel
@@ -25,9 +26,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-//        subscribeObservers()
         init()
         viewModel.setStateEvent(MainStateEvent.GetBlogEvents)
+
+        recyclerViewMain.addItemDecoration(
+            DividerItemDecoration(
+                this,
+                LinearLayoutManager.VERTICAL
+            )
+        )
 
     }
 
@@ -36,7 +43,6 @@ class MainActivity : AppCompatActivity() {
             when(dataState) {
                 is DataState.Success<List<BlogModel>> -> {
                     displayProgressBar(false)
-//                    appendBlogTitles(dataState.data)
                     setDataToRecyclerView(dataState.data)
 
                 }
@@ -52,40 +58,10 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-//    private fun loadData() {
-//        viewModel.
-////        viewModel.loadDataFromWeb().observe(this, Observer {
-////            setDataToRecyclerView(it)
-////        })
-//    }
-
-    private fun displayError(message: String?) {
-        if (message != null) {
-            textViewStart.text = message
-        } else {
-            textViewStart.text = "Unknown error"
-        }
-    }
-
-    private fun displayProgressBar(isDisplayed: Boolean) {
-        progress_bar.visibility = if (isDisplayed) View.VISIBLE else View.GONE
-    }
-
-    private fun appendBlogTitles(blogs: List<BlogModel>) {
-        val sb = StringBuilder()
-        for (blog in blogs) {
-            sb.append(blog.title + "\n")
-        }
-        textViewStart.text = sb.toString()
-    }
-
     private fun init() {
+
         setDataToRecyclerView(listOf())
         subscribeObservers()
-
-    }
-
-    private fun loadData() {
 
     }
 
@@ -95,4 +71,20 @@ class MainActivity : AppCompatActivity() {
             adapter = BlogAdapter(userList)
         }
     }
+
+    private fun displayError(message: String?) {
+
+        if (message != null) {
+            Toast.makeText(this, "error: " + message, Toast.LENGTH_LONG)
+            textViewStart.text = message
+        } else {
+            Toast.makeText(this, "Unknown error", Toast.LENGTH_LONG)
+            textViewStart.text = "Unknown error"
+        }
+    }
+
+    private fun displayProgressBar(isDisplayed: Boolean) {
+        progress_bar.visibility = if (isDisplayed) View.VISIBLE else View.GONE
+    }
+
 }
