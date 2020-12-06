@@ -17,66 +17,10 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private val TAG: String = "AppDebugger"
-
-    private val viewModel: MainViewModel by viewModels()
-
-    @Inject
-    lateinit var fragmentFactory: MainFragmentFactory
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        supportFragmentManager.fragmentFactory = fragmentFactory
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.main_frag_container, MainFragment::class.java, null)
-            .commit()
-
-
-//        subscribeObservers()
-//        viewModel.setStateEvent(MainStateEvent.GetBlogEvents)
 
     }
-
-//    private fun subscribeObservers() {
-//        viewModel.dataState.observe(this, Observer { dataState ->
-//            when(dataState) {
-//                is DataState.Success<List<BlogModel>> -> {
-//                    displayProgressBar(false)
-//                    appendBlogTitles(dataState.data)
-//
-//                }
-//                is DataState.Error -> {
-//                    displayProgressBar(false)
-//                    displayError(dataState.exception.message)
-//                }
-//                is DataState.Loading -> {
-//                    displayProgressBar(true)
-//
-//                }
-//            }
-//        })
-//    }
-//
-//    private fun displayError(message: String?) {
-//        if (message != null) {
-//            textViewStart.text = message
-//        } else {
-//            textViewStart.text = "Unknown error"
-//        }
-//    }
-//
-//    private fun displayProgressBar(isDisplayed: Boolean) {
-//        progress_bar.visibility = if (isDisplayed) View.VISIBLE else View.GONE
-//    }
-//
-//    private fun appendBlogTitles(blogs: List<BlogModel>) {
-//        val sb = StringBuilder()
-//        for (blog in blogs) {
-//            sb.append(blog.title + "\n")
-//        }
-//        textViewStart.text = sb.toString()
-//    }
 }
