@@ -31,4 +31,10 @@
         android:id="@+id/textViewStart"
         android:gravity="start" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewMain"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="5dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

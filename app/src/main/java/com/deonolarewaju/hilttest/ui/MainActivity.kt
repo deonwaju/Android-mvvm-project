@@ -3,8 +3,10 @@ package com.deonolarewaju.hilttest.ui
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.deonolarewaju.hilttest.R
 import com.deonolarewaju.hilttest.model.BlogModel
 import com.deonolarewaju.hilttest.util.DataState
@@ -23,7 +25,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        subscribeObservers()
+//        subscribeObservers()
+        init()
         viewModel.setStateEvent(MainStateEvent.GetBlogEvents)
 
     }
@@ -33,7 +36,8 @@ class MainActivity : AppCompatActivity() {
             when(dataState) {
                 is DataState.Success<List<BlogModel>> -> {
                     displayProgressBar(false)
-                    appendBlogTitles(dataState.data)
+//                    appendBlogTitles(dataState.data)
+                    setDataToRecyclerView(dataState.data)
 
                 }
                 is DataState.Error -> {
@@ -47,6 +51,13 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
+
+//    private fun loadData() {
+//        viewModel.
+////        viewModel.loadDataFromWeb().observe(this, Observer {
+////            setDataToRecyclerView(it)
+////        })
+//    }
 
     private fun displayError(message: String?) {
         if (message != null) {
@@ -66,5 +77,22 @@ class MainActivity : AppCompatActivity() {
             sb.append(blog.title + "\n")
         }
         textViewStart.text = sb.toString()
+    }
+
+    private fun init() {
+        setDataToRecyclerView(listOf())
+        subscribeObservers()
+
+    }
+
+    private fun loadData() {
+
+    }
+
+    private fun setDataToRecyclerView(userList: List<BlogModel>) {
+        recyclerViewMain.apply {
+            layoutManager = LinearLayoutManager(this@MainActivity)
+            adapter = BlogAdapter(userList)
+        }
     }
 }
